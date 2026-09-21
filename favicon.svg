@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ADOK">
+  <rect width="64" height="64" rx="13" fill="#17181A"/>
+  <g fill="none" stroke="#F26522" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- streha + prekrižane lese -->
+    <line x1="12" y1="27" x2="41" y2="13"/>
+    <line x1="30" y1="12" x2="52" y2="27"/>
+    <line x1="35" y1="9" x2="47" y2="20"/>
+    <line x1="46" y1="9" x2="40" y2="22"/>
+    <!-- desni oder -->
+    <line x1="47" y1="22" x2="47" y2="52"/>
+    <line x1="42" y1="33" x2="55" y2="33"/>
+    <line x1="42" y1="43" x2="54" y2="43"/>
+    <!-- tla -->
+    <line x1="10" y1="52" x2="50" y2="52"/>
+  </g>
+  <text x="10" y="47" font-family="'Arial Black',Helvetica,Arial,sans-serif" font-weight="900" font-size="20" letter-spacing="-1" fill="#ffffff">A</text>
+</svg>
