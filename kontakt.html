@@ -109,13 +109,19 @@
       <label for="tel">Telefon</label><input type="tel" id="tel" name="Telefon" placeholder="Telefonska številka">
       <label for="msg">Sporočilo</label><textarea id="msg" name="Sporocilo" rows="5" placeholder="Na kratko opišite, kaj načrtujete"></textarea>
       <button type="submit" class="btn btn-accent" style="width:100%;border:none;font-size:16px">Pošlji povpraševanje</button>
+      <p class="note">S pošiljanjem obrazca se odpre vaš e-poštni program. Podatke, ki jih pošljete, uporabimo za odgovor na povpraševanje. Več: <a href="politika-zasebnosti.html">politika zasebnosti</a>.</p>
     </form>
   </div></div></section>
 
   <section class="block soft"><div class="wrap">
     <div class="section-head"><div class="tag reveal">Kje nas najdete</div><h2 class="reveal">ADOK v Mariboru</h2><p class="reveal">Sedež podjetja je na Sokolski ulici 46 v Mariboru. Delujemo v Mariboru in po Podravju: Ruše, Miklavž, Hoče, Rače, Pesnica, Lenart in Slovenska Bistrica.</p></div>
-    <div class="map-frame reveal">
-      <iframe src="https://www.google.com/maps?q=Sokolska%20ulica%2046,%202000%20Maribor&output=embed" width="100%" height="380" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="ADOK, gradbeništvo, d.o.o. – Sokolska ulica 46, Maribor"></iframe>
+    <div class="map-frame external-service reveal">
+      <div class="external-placeholder">
+        <strong>Google Maps je izklopljen</strong>
+        <p>Zemljevid se naloži šele, ko dovolite zunanje storitve.</p>
+        <button type="button" class="btn btn-accent" data-load-external>Prikaži zemljevid</button>
+      </div>
+      <iframe data-consent-category="maps" data-external-src="https://www.google.com/maps?q=Sokolska%20ulica%2046,%202000%20Maribor&output=embed" width="100%" height="380" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="ADOK, gradbeništvo, d.o.o. – Sokolska ulica 46, Maribor"></iframe>
     </div>
   </div></section>
 </main>

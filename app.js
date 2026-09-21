@@ -42,7 +42,8 @@
     + '</div></div></header>';
 
   var svcLinks = SERVICES.map(function(s){ return '<a href="'+s.href+'">'+s.label+'</a>'; }).join("");
-  var mainLinks = NAV.map(function(n){ return '<a href="'+n.href+'">'+n.label+'</a>'; }).join("");
+  var mainLinks = NAV.map(function(n){ return '<a href="'+n.href+'">'+n.label+'</a>'; }).join("")
+    + '<a href="politika-zasebnosti.html">Politika zasebnosti</a>';
 
   var footer = ''
     + '<footer><div class="wrap">'
@@ -53,13 +54,208 @@
     + '<div class="foot-col"><h5>Storitve</h5>'+svcLinks+'</div>'
     + '<div class="foot-col"><h5>Podjetje</h5>'+mainLinks+'</div>'
     + '</div>'
-    + '<div class="foot-bottom"><span>&copy; '+new Date().getFullYear()+' ADOK, gradbeništvo, d.o.o. Vse pravice pridržane.</span><span>Matična 5707340 &middot; Davčna SI89707621</span><span>Spletno stran izdelal: <a href="https://storitve-bonal.com/izdelava-spletnih-strani.html" target="_blank" rel="noopener">BONAL</a></span></div>'
+    + '<div class="foot-bottom"><span>&copy; '+new Date().getFullYear()+' ADOK, gradbeništvo, d.o.o. Vse pravice pridržane.</span><span>Matična 5707340 &middot; Davčna SI89707621</span><span><button type="button" class="privacy-settings" data-privacy-settings>Nastavitve zasebnosti</button></span><span>Spletno stran izdelal: <a href="https://storitve-bonal.com/izdelava-spletnih-strani.html" target="_blank" rel="noopener">BONAL</a></span></div>'
     + '</div></footer>';
 
   var h = document.getElementById("site-header");
   if(h){ h.outerHTML = header; }
   var f = document.getElementById("site-footer");
   if(f){ f.outerHTML = footer; }
+
+  var COOKIE_KEY = "adokCookieConsent";
+  var COOKIE_VERSION = 1;
+  var COOKIE_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
+  var GA_MEASUREMENT_ID = ""; // Vstavi pravi Google Analytics ID, npr. G-XXXXXXXXXX.
+  var analyticsLoaded = false;
+
+  function readConsent(){
+    var raw;
+    try { raw = localStorage.getItem(COOKIE_KEY); }
+    catch(e){ return null; }
+    if(!raw) return null;
+    try {
+      var parsed = JSON.parse(raw);
+      var age = Date.now() - Date.parse(parsed.timestamp || "");
+      if(!parsed || parsed.version !== COOKIE_VERSION || !isFinite(age) || age > COOKIE_MAX_AGE_MS) return null;
+      return parsed;
+    } catch(e){ return null; }
+  }
+
+  function writeConsent(partial){
+    var consent = {
+      version: COOKIE_VERSION,
+      essential: true,
+      analytics: Boolean(partial.analytics),
+      maps: Boolean(partial.maps),
+      timestamp: new Date().toISOString()
+    };
+    try { localStorage.setItem(COOKIE_KEY, JSON.stringify(consent)); }
+    catch(e){}
+    return consent;
+  }
+
+  function loadMaps(){
+    document.querySelectorAll("[data-external-src][data-consent-category='maps']").forEach(function(el){
+      if(!el.getAttribute("src")){ el.setAttribute("src", el.getAttribute("data-external-src")); }
+      var box = el.closest(".external-service");
+      if(box){ box.classList.add("is-loaded"); }
+    });
+  }
+
+  function unloadMaps(){
+    document.querySelectorAll("[data-external-src][data-consent-category='maps']").forEach(function(el){
+      el.removeAttribute("src");
+      var box = el.closest(".external-service");
+      if(box){ box.classList.remove("is-loaded"); }
+    });
+  }
+
+  function loadAnalytics(){
+    if(analyticsLoaded || !GA_MEASUREMENT_ID){ return; }
+    analyticsLoaded = true;
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_MEASUREMENT_ID);
+    document.head.appendChild(script);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  function applyConsent(consent){
+    consent = consent || readConsent();
+    if(consent && consent.maps){ loadMaps(); } else { unloadMaps(); }
+    if(consent && consent.analytics){ loadAnalytics(); }
+  }
+
+  function createCookieUi(){
+    if(document.getElementById("cookie-banner")){ return; }
+    var banner = document.createElement("div");
+    banner.className = "cookie-banner";
+    banner.id = "cookie-banner";
+    banner.hidden = true;
+    banner.setAttribute("role", "region");
+    banner.setAttribute("aria-label", "Obvestilo o piškotkih");
+    banner.innerHTML = ''
+      + '<div class="cookie-banner-inner">'
+      + '<div class="cookie-banner-text">'
+      + '<h2>Piškotki in zasebnost</h2>'
+      + '<p>Uporabljamo nujno lokalno shrambo za shranjevanje vaše izbire. Google Analytics in Google Maps se naložita samo, če to dovolite. <button type="button" class="cookie-link" id="cookie-more">Preberi več</button></p>'
+      + '</div>'
+      + '<div class="cookie-banner-actions">'
+      + '<button type="button" class="cookie-btn" id="cookie-accept">Sprejmi vse</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-reject">Zavrni neobvezne</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-manage">Prilagodi</button>'
+      + '</div>'
+      + '</div>';
+
+    var overlay = document.createElement("div");
+    overlay.className = "cookie-modal-overlay";
+    overlay.id = "cookie-modal-overlay";
+    overlay.hidden = true;
+    overlay.innerHTML = ''
+      + '<div class="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title">'
+      + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Zapri">&times;</button>'
+      + '<h2 id="cookie-modal-title">Vaše možnosti zasebnosti</h2>'
+      + '<p>Neobvezne kategorije lahko kadarkoli sprejmete ali zavrnete. Izbira se shrani v vašem brskalniku.</p>'
+      + '<div class="cookie-category">'
+      + '<div><h3>Analitika</h3><p>Google Analytics pomaga razumeti obisk strani in izboljšati vsebino.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-analytics" data-category="analytics"><span>Vključi</span></label>'
+      + '</div>'
+      + '<div class="cookie-category">'
+      + '<div><h3>Google Maps</h3><p>Zemljevid na strani Kontakt se naloži šele po vaši potrditvi.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-maps" data-category="maps"><span>Vključi</span></label>'
+      + '</div>'
+      + '<div class="cookie-category">'
+      + '<div><h3>Nujno potrebno</h3><p>Shrani vašo izbiro in omogoča osnovno delovanje strani.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" checked disabled><span>Vedno vključeno</span></label>'
+      + '</div>'
+      + '<button type="button" class="cookie-save" id="cookie-save">Shrani nastavitve</button>'
+      + '<p class="cookie-small">Več informacij je v <a href="politika-zasebnosti.html">politiki zasebnosti</a>.</p>'
+      + '</div>';
+
+    document.body.appendChild(banner);
+    document.body.appendChild(overlay);
+  }
+
+  function applyToggleStates(consent){
+    document.querySelectorAll("#cookie-modal-overlay input[data-category]").forEach(function(toggle){
+      var category = toggle.getAttribute("data-category");
+      toggle.checked = Boolean(consent && consent[category]);
+    });
+  }
+
+  function hideBanner(){
+    var banner = document.getElementById("cookie-banner");
+    if(banner){ banner.hidden = true; }
+  }
+
+  function showBanner(){
+    var banner = document.getElementById("cookie-banner");
+    if(banner){ banner.hidden = false; }
+  }
+
+  function openModal(){
+    var overlay = document.getElementById("cookie-modal-overlay");
+    if(!overlay){ return; }
+    applyToggleStates(readConsent());
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    var closeBtn = document.getElementById("cookie-modal-close");
+    if(closeBtn){ closeBtn.focus(); }
+  }
+
+  function closeModal(){
+    var overlay = document.getElementById("cookie-modal-overlay");
+    if(!overlay){ return; }
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  function saveConsent(partial){
+    var consent = writeConsent(partial);
+    applyToggleStates(consent);
+    hideBanner();
+    closeModal();
+    applyConsent(consent);
+  }
+
+  createCookieUi();
+  var storedConsent = readConsent();
+  if(storedConsent){ hideBanner(); applyConsent(storedConsent); }
+  else { showBanner(); applyConsent(null); }
+
+  var acceptBtn = document.getElementById("cookie-accept");
+  var rejectBtn = document.getElementById("cookie-reject");
+  var manageBtn = document.getElementById("cookie-manage");
+  var moreBtn = document.getElementById("cookie-more");
+  var saveBtn = document.getElementById("cookie-save");
+  var closeBtn = document.getElementById("cookie-modal-close");
+  var overlay = document.getElementById("cookie-modal-overlay");
+
+  if(acceptBtn){ acceptBtn.addEventListener("click", function(){ saveConsent({ analytics: true, maps: true }); }); }
+  if(rejectBtn){ rejectBtn.addEventListener("click", function(){ saveConsent({ analytics: false, maps: false }); }); }
+  if(manageBtn){ manageBtn.addEventListener("click", openModal); }
+  if(moreBtn){ moreBtn.addEventListener("click", openModal); }
+  if(saveBtn){
+    saveBtn.addEventListener("click", function(){
+      var partial = {};
+      document.querySelectorAll("#cookie-modal-overlay input[data-category]").forEach(function(toggle){
+        partial[toggle.getAttribute("data-category")] = toggle.checked;
+      });
+      saveConsent(partial);
+    });
+  }
+  if(closeBtn){ closeBtn.addEventListener("click", closeModal); }
+  if(overlay){ overlay.addEventListener("click", function(event){ if(event.target === overlay){ closeModal(); } }); }
+  document.addEventListener("keydown", function(event){ if(event.key === "Escape"){ closeModal(); } });
+  document.addEventListener("click", function(event){
+    if(event.target.closest("[data-privacy-settings]")){ openModal(); }
+    if(event.target.closest("[data-load-external]")){
+      saveConsent({ analytics: Boolean(readConsent() && readConsent().analytics), maps: true });
+    }
+  });
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
