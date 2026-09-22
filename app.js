@@ -142,12 +142,12 @@
       + '<div class="cookie-banner-inner">'
       + '<div class="cookie-banner-text">'
       + '<h2>Piškotki in zasebnost</h2>'
-      + '<p>Uporabljamo nujno lokalno shrambo za shranjevanje vaše izbire. Google Analytics in Google Maps se naložita samo, če to dovolite. <button type="button" class="cookie-link" id="cookie-more">Preberi več</button></p>'
+      + '<p>Uporabljamo nujno lokalno shrambo za shranjevanje vaše izbire. Google Analytics in Google Maps se naložita samo, če to dovolite. <button type="button" class="cookie-link" id="cookie-more" onclick="window.ADOKCookieConsent.openSettings()">Preberi več</button></p>'
       + '</div>'
       + '<div class="cookie-banner-actions">'
-      + '<button type="button" class="cookie-btn" id="cookie-accept">Sprejmi vse</button>'
-      + '<button type="button" class="cookie-btn secondary" id="cookie-reject">Zavrni neobvezne</button>'
-      + '<button type="button" class="cookie-btn secondary" id="cookie-manage">Prilagodi</button>'
+      + '<button type="button" class="cookie-btn" id="cookie-accept" onclick="window.ADOKCookieConsent.acceptAll()">Sprejmi vse</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-reject" onclick="window.ADOKCookieConsent.rejectOptional()">Zavrni neobvezne</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-manage" onclick="window.ADOKCookieConsent.openSettings()">Prilagodi</button>'
       + '</div>'
       + '</div>';
 
@@ -158,7 +158,7 @@
     overlay.style.display = "none";
     overlay.innerHTML = ''
       + '<div class="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title">'
-      + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Zapri">&times;</button>'
+      + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Zapri" onclick="window.ADOKCookieConsent.closeSettings()">&times;</button>'
       + '<h2 id="cookie-modal-title">Vaše možnosti zasebnosti</h2>'
       + '<p>Neobvezne kategorije lahko kadarkoli sprejmete ali zavrnete. Izbira se shrani v vašem brskalniku.</p>'
       + '<div class="cookie-category">'
@@ -173,7 +173,7 @@
       + '<div><h3>Nujno potrebno</h3><p>Shrani vašo izbiro in omogoča osnovno delovanje strani.</p></div>'
       + '<label class="cookie-toggle"><input type="checkbox" checked disabled><span>Vedno vključeno</span></label>'
       + '</div>'
-      + '<button type="button" class="cookie-save" id="cookie-save">Shrani nastavitve</button>'
+      + '<button type="button" class="cookie-save" id="cookie-save" onclick="window.ADOKCookieConsent.saveSettings()">Shrani nastavitve</button>'
       + '<p class="cookie-small">Več informacij je v <a href="politika-zasebnosti.html">politiki zasebnosti</a>.</p>'
       + '</div>';
 
@@ -224,6 +224,24 @@
     closeModal();
     applyConsent(consent);
   }
+
+  window.ADOKCookieConsent = {
+    acceptAll: function(){ saveConsent({ analytics: true, maps: true }); },
+    rejectOptional: function(){ saveConsent({ analytics: false, maps: false }); },
+    openSettings: openModal,
+    closeSettings: closeModal,
+    saveSettings: function(){
+      var partial = {};
+      document.querySelectorAll("#cookie-modal-overlay input[data-category]").forEach(function(toggle){
+        partial[toggle.getAttribute("data-category")] = toggle.checked;
+      });
+      saveConsent(partial);
+    },
+    allowMaps: function(){
+      var current = readConsent();
+      saveConsent({ analytics: Boolean(current && current.analytics), maps: true });
+    }
+  };
 
   createCookieUi();
   var storedConsent = readConsent();
