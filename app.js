@@ -50,7 +50,7 @@
     + '<div class="foot-top">'
     + '<div style="max-width:300px"><img class="foot-logo" src="images/web/adok-logo-white.png" alt="ADOK, gradbeništvo, d.o.o.">'
     + '<p style="margin-top:8px;opacity:.82">Gradbeništvo, novogradnje in adaptacije<br>Sokolska ulica 46, 2000 Maribor</p>'
-    + '<p style="margin-top:10px;opacity:.82">'+MOBILE+' &middot; 02 614 01 13<br>adnan.kolcakovic1@gmail.com</p></div>'
+    + '<p style="margin-top:10px;opacity:.82">'+MOBILE+'<br>adok.doo@gmail.com</p></div>'
     + '<div class="foot-col"><h5>Storitve</h5>'+svcLinks+'</div>'
     + '<div class="foot-col"><h5>Podjetje</h5>'+mainLinks+'</div>'
     + '</div>'
@@ -65,7 +65,7 @@
   var COOKIE_KEY = "adokCookieConsent";
   var COOKIE_VERSION = 1;
   var COOKIE_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
-  var GA_MEASUREMENT_ID = ""; // Vstavi pravi Google Analytics ID, npr. G-XXXXXXXXXX.
+  var GA_MEASUREMENT_ID = "G-X4ZNPEY2H7";
   var analyticsLoaded = false;
 
   function readConsent(){
