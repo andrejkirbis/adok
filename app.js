@@ -135,6 +135,7 @@
     banner.className = "cookie-banner";
     banner.id = "cookie-banner";
     banner.hidden = true;
+    banner.style.display = "none";
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Obvestilo o piškotkih");
     banner.innerHTML = ''
@@ -154,6 +155,7 @@
     overlay.className = "cookie-modal-overlay";
     overlay.id = "cookie-modal-overlay";
     overlay.hidden = true;
+    overlay.style.display = "none";
     overlay.innerHTML = ''
       + '<div class="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title">'
       + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Zapri">&times;</button>'
@@ -188,12 +190,12 @@
 
   function hideBanner(){
     var banner = document.getElementById("cookie-banner");
-    if(banner){ banner.hidden = true; }
+    if(banner){ banner.hidden = true; banner.style.display = "none"; }
   }
 
   function showBanner(){
     var banner = document.getElementById("cookie-banner");
-    if(banner){ banner.hidden = false; }
+    if(banner){ banner.hidden = false; banner.style.display = ""; }
   }
 
   function openModal(){
@@ -201,6 +203,7 @@
     if(!overlay){ return; }
     applyToggleStates(readConsent());
     overlay.hidden = false;
+    overlay.style.display = "";
     document.body.style.overflow = "hidden";
     var closeBtn = document.getElementById("cookie-modal-close");
     if(closeBtn){ closeBtn.focus(); }
@@ -210,6 +213,7 @@
     var overlay = document.getElementById("cookie-modal-overlay");
     if(!overlay){ return; }
     overlay.hidden = true;
+    overlay.style.display = "none";
     document.body.style.overflow = "";
   }
 

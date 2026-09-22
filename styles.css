@@ -190,6 +190,7 @@ svg{display:block}
 
 /* Privacy/cookie consent */
 .cookie-banner{position:fixed;left:18px;right:18px;bottom:18px;z-index:80;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.22);padding:18px}
+.cookie-banner[hidden],.cookie-modal-overlay[hidden]{display:none !important}
 .cookie-banner-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1120px;margin:0 auto}
 .cookie-banner h2{font-size:19px;color:var(--brand-900);margin-bottom:5px}
 .cookie-banner p{font-size:14px;color:var(--muted);max-width:70ch}
