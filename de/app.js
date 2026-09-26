@@ -1,46 +1,46 @@
-/* ADOK, gradbeništvo, d.o.o. — skupna logika za vse strani
-   Vstavi glavo in nogo, poskrbi za mobilni meni, animacije ob drsenju
-   in učinek "žive" fotografije (parallax + zoom ob prehodu miške). */
+/* ADOK, gradbeništvo, d.o.o. — gemeinsame Logik für alle Seiten (DE)
+   Fügt Kopf- und Fußzeile ein, kümmert sich um das mobile Menü, Scroll-
+   Animationen und den "lebendigen" Foto-Effekt (Parallax + Zoom beim Hover). */
 (function(){
-  var MOBILE = "069 673 013";
+  var MOBILE = "+386 69 673 013";
 
   var NAV = [
-    {href:"index.html",    id:"domov",    label:"Domov"},
-    {href:"storitve.html", id:"storitve", label:"Storitve"},
-    {href:"o-nas.html",    id:"o-nas",    label:"O nas"},
-    {href:"zakaj.html",    id:"zakaj",    label:"Zakaj mi"},
+    {href:"index.html",    id:"domov",    label:"Startseite"},
+    {href:"storitve.html", id:"storitve", label:"Leistungen"},
+    {href:"o-nas.html",    id:"o-nas",    label:"Über uns"},
+    {href:"zakaj.html",    id:"zakaj",    label:"Warum wir"},
     {href:"kontakt.html",  id:"kontakt",  label:"Kontakt"}
   ];
 
   var SERVICES = [
-    {href:"novogradnje.html",     label:"Novogradnje"},
-    {href:"prenove.html",         label:"Prenove in adaptacije"},
-    {href:"fasade.html",          label:"Fasade"},
-    {href:"strehe.html",          label:"Strehe"},
-    {href:"suhomontaza.html",     label:"Suhomontaža (knauf)"},
-    {href:"ploscice.html",        label:"Polaganje ploščic"},
-    {href:"kamen.html",           label:"Kamnite obloge"},
-    {href:"skarpe.html",          label:"Škarpe in podporni zidovi"},
-    {href:"stopnice.html",        label:"Stopnice in ograje"},
-    {href:"zemeljska-dela.html",  label:"Zemeljska dela"}
+    {href:"novogradnje.html",     label:"Neubau"},
+    {href:"prenove.html",         label:"Sanierung & Umbau"},
+    {href:"fasade.html",          label:"Fassaden"},
+    {href:"strehe.html",          label:"Dächer"},
+    {href:"suhomontaza.html",     label:"Trockenbau"},
+    {href:"ploscice.html",        label:"Fliesenverlegung"},
+    {href:"kamen.html",           label:"Steinverkleidungen"},
+    {href:"skarpe.html",          label:"Stützmauern"},
+    {href:"stopnice.html",        label:"Treppen & Geländer"},
+    {href:"zemeljska-dela.html",  label:"Erdarbeiten"}
   ];
 
   var active = document.body.getAttribute("data-page") || "domov";
 
-  /* Preklop jezika: SI (ta stran) / DE (nemška različica v mapi /de/) */
-  var CURRENT_FILE = (location.pathname.split("/").pop() || "index.html");
-  var langSwitch = ''
-    + '<div class="lang-switch" role="group" aria-label="Jezik / Sprache">'
-    + '<a class="active" href="'+CURRENT_FILE+'" hreflang="sl" aria-current="true">SI</a>'
-    + '<span class="lang-sep" aria-hidden="true">/</span>'
-    + '<a href="de/'+CURRENT_FILE+'" hreflang="de">DE</a>'
-    + '</div>';
-
-  var logo = '<img class="brand-logo" src="images/web/adok-logo.png" alt="ADOK, gradbeništvo, d.o.o.">';
+  var logo = '<img class="brand-logo" src="../images/web/adok-logo.png" alt="ADOK, gradbeništvo, d.o.o.">';
 
   var navItems = NAV.map(function(n){
     return '<li><a href="'+n.href+'"'+(n.id===active?' class="active"':'')+'>'+n.label+'</a></li>';
   }).join("");
+
+  /* Sprachumschaltung: SI (slowenische Version im Stammverzeichnis) / DE (diese Seite) */
+  var CURRENT_FILE = (location.pathname.split("/").pop() || "index.html");
+  var langSwitch = ''
+    + '<div class="lang-switch" role="group" aria-label="Jezik / Sprache">'
+    + '<a href="../'+CURRENT_FILE+'" hreflang="sl">SI</a>'
+    + '<span class="lang-sep" aria-hidden="true">/</span>'
+    + '<a class="active" href="'+CURRENT_FILE+'" hreflang="de" aria-current="true">DE</a>'
+    + '</div>';
 
   var header = ''
     + '<header><div class="wrap nav">'
@@ -49,23 +49,23 @@
     + '<div class="nav-right">'
     + langSwitch
     + '<a class="nav-phone" href="tel:+38669673013"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#262A2E" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg><span>'+MOBILE+'</span></a>'
-    + '<button class="menu-toggle" aria-label="Odpri meni" aria-expanded="false" aria-controls="glavni-meni"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>'
+    + '<button class="menu-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="glavni-meni"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>'
     + '</div></div></header>';
 
   var svcLinks = SERVICES.map(function(s){ return '<a href="'+s.href+'">'+s.label+'</a>'; }).join("");
   var mainLinks = NAV.map(function(n){ return '<a href="'+n.href+'">'+n.label+'</a>'; }).join("")
-    + '<a href="politika-zasebnosti.html">Politika zasebnosti</a>';
+    + '<a href="politika-zasebnosti.html">Datenschutz</a>';
 
   var footer = ''
     + '<footer><div class="wrap">'
     + '<div class="foot-top">'
-    + '<div style="max-width:300px"><img class="foot-logo" src="images/web/adok-logo-white.png" alt="ADOK, gradbeništvo, d.o.o.">'
-    + '<p style="margin-top:8px;opacity:.82">Gradbeništvo, novogradnje in adaptacije<br>Sokolska ulica 46, 2000 Maribor</p>'
+    + '<div style="max-width:300px"><img class="foot-logo" src="../images/web/adok-logo-white.png" alt="ADOK, gradbeništvo, d.o.o.">'
+    + '<p style="margin-top:8px;opacity:.82">Bauunternehmen, Neubau und Sanierung<br>Sokolska ulica 46, 2000 Maribor (SI)</p>'
     + '<p style="margin-top:10px;opacity:.82">'+MOBILE+'<br>adok.doo@gmail.com</p></div>'
-    + '<div class="foot-col"><h5>Storitve</h5>'+svcLinks+'</div>'
-    + '<div class="foot-col"><h5>Podjetje</h5>'+mainLinks+'</div>'
+    + '<div class="foot-col"><h5>Leistungen</h5>'+svcLinks+'</div>'
+    + '<div class="foot-col"><h5>Unternehmen</h5>'+mainLinks+'</div>'
     + '</div>'
-    + '<div class="foot-bottom"><span>&copy; '+new Date().getFullYear()+' ADOK, gradbeništvo, d.o.o. Vse pravice pridržane.</span><span>Matična 5707340 &middot; Davčna SI89707621</span><span><button type="button" class="privacy-settings" data-privacy-settings>Nastavitve zasebnosti</button></span><span>Spletno stran izdelal: <a href="https://storitve-bonal.com/izdelava-spletnih-strani.html" target="_blank" rel="noopener">BONAL</a></span></div>'
+    + '<div class="foot-bottom"><span>&copy; '+new Date().getFullYear()+' ADOK, gradbeništvo, d.o.o. Alle Rechte vorbehalten.</span><span>USt-IdNr. SI89707621</span><span><button type="button" class="privacy-settings" data-privacy-settings>Datenschutzeinstellungen</button></span><span>Website erstellt von: <a href="https://storitve-bonal.com/izdelava-spletnih-strani.html" target="_blank" rel="noopener">BONAL</a></span></div>'
     + '</div></footer>';
 
   var h = document.getElementById("site-header");
@@ -148,17 +148,17 @@
     banner.hidden = true;
     banner.style.display = "none";
     banner.setAttribute("role", "region");
-    banner.setAttribute("aria-label", "Obvestilo o piškotkih");
+    banner.setAttribute("aria-label", "Cookie-Hinweis");
     banner.innerHTML = ''
       + '<div class="cookie-banner-inner">'
       + '<div class="cookie-banner-text">'
-      + '<h2>Piškotki in zasebnost</h2>'
-      + '<p>Uporabljamo nujno lokalno shrambo za shranjevanje vaše izbire. Google Analytics in Google Maps se naložita samo, če to dovolite. <button type="button" class="cookie-link" id="cookie-more" onclick="window.ADOKCookieConsent.openSettings()">Preberi več</button></p>'
+      + '<h2>Cookies und Datenschutz</h2>'
+      + '<p>Wir verwenden notwendigen lokalen Speicher, um Ihre Auswahl zu sichern. Google Analytics und Google Maps werden nur geladen, wenn Sie zustimmen. <button type="button" class="cookie-link" id="cookie-more" onclick="window.ADOKCookieConsent.openSettings()">Mehr erfahren</button></p>'
       + '</div>'
       + '<div class="cookie-banner-actions">'
-      + '<button type="button" class="cookie-btn" id="cookie-accept" onclick="window.ADOKCookieConsent.acceptAll()">Sprejmi vse</button>'
-      + '<button type="button" class="cookie-btn secondary" id="cookie-reject" onclick="window.ADOKCookieConsent.rejectOptional()">Zavrni neobvezne</button>'
-      + '<button type="button" class="cookie-btn secondary" id="cookie-manage" onclick="window.ADOKCookieConsent.openSettings()">Prilagodi</button>'
+      + '<button type="button" class="cookie-btn" id="cookie-accept" onclick="window.ADOKCookieConsent.acceptAll()">Alle akzeptieren</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-reject" onclick="window.ADOKCookieConsent.rejectOptional()">Optionale ablehnen</button>'
+      + '<button type="button" class="cookie-btn secondary" id="cookie-manage" onclick="window.ADOKCookieConsent.openSettings()">Anpassen</button>'
       + '</div>'
       + '</div>';
 
@@ -169,23 +169,23 @@
     overlay.style.display = "none";
     overlay.innerHTML = ''
       + '<div class="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title">'
-      + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Zapri" onclick="window.ADOKCookieConsent.closeSettings()">&times;</button>'
-      + '<h2 id="cookie-modal-title">Vaše možnosti zasebnosti</h2>'
-      + '<p>Neobvezne kategorije lahko kadarkoli sprejmete ali zavrnete. Izbira se shrani v vašem brskalniku.</p>'
+      + '<button type="button" class="cookie-modal-close" id="cookie-modal-close" aria-label="Schließen" onclick="window.ADOKCookieConsent.closeSettings()">&times;</button>'
+      + '<h2 id="cookie-modal-title">Ihre Datenschutzoptionen</h2>'
+      + '<p>Optionale Kategorien können Sie jederzeit akzeptieren oder ablehnen. Ihre Auswahl wird in Ihrem Browser gespeichert.</p>'
       + '<div class="cookie-category">'
-      + '<div><h3>Analitika</h3><p>Google Analytics pomaga razumeti obisk strani in izboljšati vsebino.</p></div>'
-      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-analytics" data-category="analytics"><span>Vključi</span></label>'
+      + '<div><h3>Analytik</h3><p>Google Analytics hilft, die Besuche der Seite zu verstehen und die Inhalte zu verbessern.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-analytics" data-category="analytics"><span>Aktivieren</span></label>'
       + '</div>'
       + '<div class="cookie-category">'
-      + '<div><h3>Google Maps</h3><p>Zemljevid na strani Kontakt se naloži šele po vaši potrditvi.</p></div>'
-      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-maps" data-category="maps"><span>Vključi</span></label>'
+      + '<div><h3>Google Maps</h3><p>Die Karte auf der Kontaktseite wird erst nach Ihrer Zustimmung geladen.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" id="cookie-cat-maps" data-category="maps"><span>Aktivieren</span></label>'
       + '</div>'
       + '<div class="cookie-category">'
-      + '<div><h3>Nujno potrebno</h3><p>Shrani vašo izbiro in omogoča osnovno delovanje strani.</p></div>'
-      + '<label class="cookie-toggle"><input type="checkbox" checked disabled><span>Vedno vključeno</span></label>'
+      + '<div><h3>Unbedingt erforderlich</h3><p>Speichert Ihre Auswahl und ermöglicht die grundlegende Funktion der Seite.</p></div>'
+      + '<label class="cookie-toggle"><input type="checkbox" checked disabled><span>Immer aktiv</span></label>'
       + '</div>'
-      + '<button type="button" class="cookie-save" id="cookie-save" onclick="window.ADOKCookieConsent.saveSettings()">Shrani nastavitve</button>'
-      + '<p class="cookie-small">Več informacij je v <a href="politika-zasebnosti.html">politiki zasebnosti</a>.</p>'
+      + '<button type="button" class="cookie-save" id="cookie-save" onclick="window.ADOKCookieConsent.saveSettings()">Einstellungen speichern</button>'
+      + '<p class="cookie-small">Mehr Informationen finden Sie in der <a href="politika-zasebnosti.html">Datenschutzerklärung</a>.</p>'
       + '</div>';
 
     document.body.appendChild(banner);
@@ -292,7 +292,7 @@
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Mobile menu */
+  /* Mobiles Menü */
   var toggle = document.querySelector('.menu-toggle');
   var menu = document.querySelector('nav ul');
   if(toggle && menu){
@@ -303,7 +303,7 @@
     });
   }
 
-  /* Reveal on scroll */
+  /* Reveal beim Scrollen */
   var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
   if(reduceMotion || !('IntersectionObserver' in window)){
     reveals.forEach(function(el){ el.classList.add('is-visible'); });
@@ -314,7 +314,6 @@
       });
     }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
     reveals.forEach(function(el){ io.observe(el); });
-    /* Karkoli je že v vidnem polju ob nalaganju, prikaži takoj s stopnjevanjem */
     requestAnimationFrame(function(){
       var vh = window.innerHeight || document.documentElement.clientHeight;
       var i = 0;
@@ -325,7 +324,7 @@
     });
   }
 
-  /* Žive fotografije: parallax ob drsenju (zoom ob hoverju je v CSS) */
+  /* Lebendige Fotos: Parallax beim Scrollen (Zoom beim Hover ist im CSS) */
   function updateAlive(){
     if(reduceMotion) return;
     var vh = window.innerHeight || document.documentElement.clientHeight;
